@@ -1,4 +1,4 @@
-package pl.coderslab.db.tables;
+package pl.coderslab.db.models;
 
 public class Group {
     private int id;

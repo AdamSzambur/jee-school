@@ -2,19 +2,21 @@ package pl.coderslab.db.dao;
 import java.sql.*;
 
 import pl.coderslab.db.DbUtil;
-import pl.coderslab.db.tables.GroupPrivileges;
+import pl.coderslab.db.models.GroupPrivileges;
 
 public class GroupPrivilegesDao {
     private static final String CREATE_QUERY =
-            "INSERT INTO group_privileges(group_id, solution, rating) VALUES (?,?,?)";
+            "INSERT INTO group_privileges(group_id, learner, teacher) VALUES (?,?,?)";
     private static final String READ_QUERY =
             "SELECT * FROM group_privileges where id = ?";
     private static final String UPDATE_QUERY =
-            "UPDATE group_privileges SET group_id = ?, solution = ?, rating = ?  where id = ?";
+            "UPDATE group_privileges SET group_id = ?, learner = ?, teacher = ?  where id = ?";
     private static final String DELETE_QUERY =
             "DELETE FROM group_privileges WHERE id = ?";
     private static final String FIND_BY_GROUP_ID_QUERY =
             "SELECT * FROM group_privileges WHERE group_id = ?";
+    private static final String UPDATE_FOR_GROUPID_QUERY =
+            "UPDATE group_privileges SET learner = ?, teacher = ?  where group_id = ?";
 
 
 
@@ -23,8 +25,8 @@ public class GroupPrivilegesDao {
         try (Connection conn = DbUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(CREATE_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, groupPrivileges.getGroupId());
-            statement.setInt(2, groupPrivileges.getSolution());
-            statement.setInt(3, groupPrivileges.getRating());
+            statement.setInt(2, groupPrivileges.getLearner());
+            statement.setInt(3, groupPrivileges.getTeacher());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -47,8 +49,8 @@ public class GroupPrivilegesDao {
                 GroupPrivileges groupPrivileges = new GroupPrivileges();
                 groupPrivileges.setId(resultSet.getInt("id"));
                 groupPrivileges.setGroupId(resultSet.getInt("group_id"));
-                groupPrivileges.setRating(resultSet.getInt("rating"));
-                groupPrivileges.setSolution(resultSet.getInt("solution"));
+                groupPrivileges.setTeacher(resultSet.getInt("teacher"));
+                groupPrivileges.setLearner(resultSet.getInt("learner"));
                 return groupPrivileges;
             }
         } catch (SQLException e) {
@@ -61,8 +63,8 @@ public class GroupPrivilegesDao {
         try (Connection conn = DbUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(UPDATE_QUERY);
             statement.setInt(1, groupPrivileges.getGroupId());
-            statement.setInt(2, groupPrivileges.getSolution());
-            statement.setInt(3, groupPrivileges.getRating());
+            statement.setInt(2, groupPrivileges.getLearner());
+            statement.setInt(3, groupPrivileges.getTeacher());
             statement.setInt(4, groupPrivileges.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -91,13 +93,26 @@ public class GroupPrivilegesDao {
                 GroupPrivileges groupPrivileges = new GroupPrivileges();
                 groupPrivileges.setId(resultSet.getInt("id"));
                 groupPrivileges.setGroupId(resultSet.getInt("group_id"));
-                groupPrivileges.setSolution(resultSet.getInt("solution"));
-                groupPrivileges.setRating(resultSet.getInt("rating"));
+                groupPrivileges.setLearner(resultSet.getInt("learner"));
+                groupPrivileges.setTeacher(resultSet.getInt("teacher"));
                 return groupPrivileges;
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+
+    public void setUpdateForGroupidQuery(GroupPrivileges groupPrivileges) {
+        try (Connection conn = DbUtil.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(UPDATE_FOR_GROUPID_QUERY);
+            statement.setInt(1, groupPrivileges.getLearner());
+            statement.setInt(2, groupPrivileges.getTeacher());
+            statement.setInt(3, groupPrivileges.getGroupId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Nie zaktualizowano tablicy dostepu grupy.");
+            System.err.println(e.getMessage());
+        }
     }
 }

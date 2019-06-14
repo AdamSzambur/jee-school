@@ -1,10 +1,12 @@
 package pl.coderslab.db.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import pl.coderslab.db.DbUtil;
-import pl.coderslab.db.tables.Exercise;
+import pl.coderslab.db.models.Exercise;
 
 public class ExerciseDao {
     private static final String CREATE_QUERY =
@@ -82,15 +84,9 @@ public class ExerciseDao {
         }
     }
 
-    private Exercise[] addToArray(Exercise u, Exercise[] exercises) {
-        Exercise[] tmpExercises = Arrays.copyOf(exercises, exercises.length + 1);
-        tmpExercises[exercises.length] = u;
-        return tmpExercises;
-    }
-
-    public Exercise[] findAll() {
+    public List<Exercise> findAll() {
         try (Connection conn = DbUtil.getConnection()) {
-            Exercise[] exercises = new Exercise[0];
+            List<Exercise> exercises = new ArrayList<>();
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -98,7 +94,7 @@ public class ExerciseDao {
                 exercise.setId(resultSet.getInt("id"));
                 exercise.setTitle(resultSet.getString("title"));
                 exercise.setDescription(resultSet.getString("description"));
-                exercises = addToArray(exercise, exercises);
+                exercises.add(exercise);
             }
             return exercises;
         } catch (SQLException e) {
@@ -107,9 +103,9 @@ public class ExerciseDao {
         }
     }
 
-    public Exercise[] findAllNotSolvedByUserId(int userId) {
+    public List<Exercise> findAllNotSolvedByUserId(int userId) {
         try (Connection conn = DbUtil.getConnection()) {
-            Exercise[] exercises = new Exercise[0];
+            List<Exercise> exercises = new ArrayList<>();
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_NOT_SOLVED_BY_USER_ID_QUERY);
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
@@ -118,7 +114,7 @@ public class ExerciseDao {
                 exercise.setId(resultSet.getInt("id"));
                 exercise.setTitle(resultSet.getString("title"));
                 exercise.setDescription(resultSet.getString("description"));
-                exercises = addToArray(exercise, exercises);
+                exercises.add(exercise);
             }
             return exercises;
         } catch (SQLException e) {

@@ -1,7 +1,7 @@
 package pl.coderslab.db.dao;
 
 import pl.coderslab.db.DbUtil;
-import pl.coderslab.db.tables.Group;
+import pl.coderslab.db.models.Group;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -71,12 +71,11 @@ public class GroupDao {
             statement.setInt(1, groupId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Nie usunięto grupy.");
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-    public Group[] findAll() {
+    public List<Group> findAll() {
         try (Connection conn = DbUtil.getConnection()) {
             List<Group> groups = new ArrayList<>();
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_QUERY);
@@ -87,7 +86,7 @@ public class GroupDao {
                 group.setName(resultSet.getString("name"));
                 groups.add(group);
             }
-            return groups.toArray(new Group[0]);
+            return groups;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;

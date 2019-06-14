@@ -1,15 +1,21 @@
-package pl.coderslab.db.tables;
-
-import org.mindrot.jbcrypt.BCrypt;
+package pl.coderslab.db.models;
 
 public class User {
-
-
     private int id;
     private String userName;
     private String email;
     private String password;
     private int groupId;
+
+    private String groupName;
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
     public int getGroupId() {
         return groupId;
@@ -40,7 +46,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = hashPassword(password);
+        this.password = password;
     }
 
     public String getUserName() {
@@ -59,10 +65,6 @@ public class User {
         this.email = email;
         setPassword(password);
         this.groupId = groupId;
-    }
-
-    private String hashPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package pl.coderslab.db.tables;
+package pl.coderslab.db.models;
 
 public class Solution {
     private int id;
@@ -8,14 +8,23 @@ public class Solution {
     private int exercise_id;
     private int users_id;
     private int rating;
-    private String comment;
+    private String userName;
+    private String exerciseTitle;
 
-    public String getComment() {
-        return comment;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getExerciseTitle() {
+        return exerciseTitle;
+    }
+
+    public void setExerciseTitle(String exerciseTitle) {
+        this.exerciseTitle = exerciseTitle;
     }
 
     public int getRating() {
@@ -83,8 +92,7 @@ public class Solution {
                 ", description='" + description + '\'' +
                 ", exercise_id=" + exercise_id +
                 ", users_id=" + users_id +
-                ", rating ='" + rating + "'" +
-                ", comment ='" + comment + "'";
+                ", teacher ='" + rating + "'";
     }
 
     public Solution(String created, String updated, String description, int exercise_id, int users_id) {
