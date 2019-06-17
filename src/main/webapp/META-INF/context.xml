@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-    <Resource name="jdbc/school"
+    <Resource name="jdbc/jeeschool"
               auth="Container"
               type="javax.sql.DataSource"
               username="root"
               password="coderslab"
               driverClassName="com.mysql.jdbc.Driver"
               connectionProperties="useUnicode=yes;characterEncoding=utf8;useSSL=true"
-              url="jdbc:mysql://localhost:3306/warsztaty_3"
+              url="jdbc:mysql://localhost:3306/jeeschool"
               maxTotal="100"
               maxIdle="30"
               maxWaitMillis="10000"
